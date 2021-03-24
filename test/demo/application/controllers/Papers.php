@@ -8,19 +8,22 @@ class Papers extends CI_Controller {
 		$this->load->view('welcome_message');
 	}
 
-    //public function read()
-    public function write($year)
-	{
-        if ( ! file_exists(APPPATH.'views/papers/'.$year.'.php')) 
-        { 
-            show_404(); 
-        } 
+  public function read($year) {
+    $this->load->view('papers/'.$year);
+    $this->load->view('templates/footer');
+  }
+  //   public function write($year)
+	// {
+  //       if ( ! file_exists(APPPATH.'views/papers/'.$year.'.php')) 
+  //       { 
+  //           show_404(); 
+  //       } 
     
-        $data['year'] = $year;
-		//$this->load->view('papers/2017');
-        $this->load->view('templates/header',$data);
-        $this->load->view('papers/'.$year,$data);
-        $this->load->view('templates/footer',$data);
-	}
+  //       $data['year'] = $year;
+	// 	//$this->load->view('papers/2017');
+  //       $this->load->view('templates/header',$data);
+  //       $this->load->view('papers/'.$year,$data);
+  //       $this->load->view('templates/footer',$data);
+	// }
 }
 
