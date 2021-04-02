@@ -17,3 +17,6 @@ $autoload['libraries'] - array('session', 'database', 'email', 'table')
 
 Database related
 Dataabse name is project
+
+Links related
+Do wide search for https://infs3202-8a85b4a1.uqcloud.net/project/ - since new deployed environment will have different link
