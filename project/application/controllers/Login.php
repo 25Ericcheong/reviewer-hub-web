@@ -1,7 +1,8 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
-class LoginRegistration extends CI_Controller
+class Login extends CI_Controller
 {
+    // method doesn't load a page but rather helps with checking if username and password is correct which then helps ajax decide on what to do
     public function check_login() {
         $this->load->model('User_model'); // load User_model
         $username_input = $this->input->post('username');
