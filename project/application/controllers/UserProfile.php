@@ -38,9 +38,15 @@ class UserProfile extends CI_Controller {
 	}
 
 	// executed when user clicks edit profile button
-	public function edit_profile()
-	{
+	public function edit_profile() {
+		$username = $this->input->post('username');
+        $occupation = $this->input->post('occupation');
+		$phone = $this->input->post('phone');
+		$about = $this->input->post('about');
+		$country = $this->input->post('country');
 		
+		$this->User_model->edit_user_profile($username, $occupation, $phone, $about, $country);
+		echo "Changes Saved";
 	}
 
 	public function logout() {

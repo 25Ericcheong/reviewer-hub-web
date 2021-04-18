@@ -98,7 +98,7 @@
               <!-- Will require href link and further development -->
               <a>Forgot Password?</a>
             </div>
-          </form id="loginForm">
+          </form>
         </div>
         <div class="modal-footer d-flex justify-content-between">
           <button type="button" class="btn btn-secondary bg-danger" data-dismiss="modal">Exit</button>

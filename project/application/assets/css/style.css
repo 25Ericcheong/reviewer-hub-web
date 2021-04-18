@@ -16,6 +16,16 @@
 }
 
 #details_section, #about_section {
-    padding: 2% 2% 0 2%;
+    padding: 2% 2% 1% 2%;
     border: lightgray solid 1px;
+}
+
+#secondary-nav {
+    width: 100%;
+}
+
+/* for footer */
+#footer p {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
 }

@@ -45,13 +45,12 @@ class User_model extends CI_Model {
 	}
 
 	// registers user to database
-	public function register_user($username, $email, $password, $phone_num = "") {
+	public function register_user($username, $email, $password) {
 		// data to be inserted into database
 		$data = array(
 			'Username' => $username,
 			'Password' => $password,
-			'Email' => $email,
-			'Phone_Number' => $phone_num
+			'Email' => $email
 		);
 
 		$this->db->insert('Users', $data);
@@ -65,6 +64,27 @@ class User_model extends CI_Model {
 		$this->db->where('Username', $username);
 		$query = $this->db->get();
 		return $query->row_array();
+	}
+
+	// get user ID registered in database
+	public function get_user_id($username) 
+	{
+		$user_data = $this->load_user_data($username);
+		return $user_data["UserID"];
+	}
+
+	// will insert editted user data profile into database
+	public function edit_user_profile($username, $occupation, $phone, $about, $country) {
+		$data = array(
+			'Country' => $country,
+			'Occupation' => $occupation,
+			'About' => $about,
+			'Phone' => $phone
+		);
+
+		$userID = $this->get_user_id($username);
+		$this->db->where('UserID', $userID);
+		$this->db->update('Users', $data);
 	}
 }
 ?>
