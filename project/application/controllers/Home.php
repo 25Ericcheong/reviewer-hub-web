@@ -10,14 +10,7 @@ class Home extends CI_Controller {
 
 	public function index()
 	{
-		$data['cookie']= 'not true';
-		if ($this->input->cookie('remember') == 'true') {
-			$data['cookie']= true;	
-		}
-
-		$this->load->helper('form');
-		$this->load->helper('url');
-		$this->load->view('template/header', $data);
+		$this->load->view('template/header');
 
 		// still require body
 

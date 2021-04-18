@@ -1,7 +1,7 @@
 <footer>
     <div class="container">
-        <div class="row vcenter">
-            <div class="col-xs-6">
+        <div class="row center">
+            <div class="col-sm">
                 <p>&copy; 2021-<?php echo date("Y"); ?></p>
             </div>
         </div>

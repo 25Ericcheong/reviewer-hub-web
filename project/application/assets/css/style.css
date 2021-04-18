@@ -1,0 +1,21 @@
+/* for user profile styling */
+#user_profile_heading {
+    max-width: 90%;
+    margin: 5%;
+    border: lightgray solid 1px;
+}
+
+#user_display_pic {
+    max-width: 70%;
+    max-height: 70%;
+}
+
+#user_details {
+    max-width: 90%;
+    margin: 5%;
+}
+
+#details_section, #about_section {
+    padding: 2% 2% 0 2%;
+    border: lightgray solid 1px;
+}

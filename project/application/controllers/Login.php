@@ -41,7 +41,7 @@ class Login extends CI_Controller
 		delete_cookie("username");
 		delete_cookie("password");
 		delete_cookie("remember");
-		redirect('home'); //redirect user back to homepage
+		redirect('Home'); //redirect user back to homepage
 	}
 
 }

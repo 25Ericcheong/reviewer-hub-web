@@ -56,5 +56,15 @@ class User_model extends CI_Model {
 
 		$this->db->insert('Users', $data);
 	}
+
+	// load user details from database
+	public function load_user_data($username)
+	{
+		$this->db->select('*');
+		$this->db->from('Users');
+		$this->db->where('Username', $username);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
 }
 ?>

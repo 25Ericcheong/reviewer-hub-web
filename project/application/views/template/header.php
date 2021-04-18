@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>INFS7202 Project</title>
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/assets/css/style.css">
     <script src="<?php echo base_url(); ?>assets/js/jquery-3.6.0.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.js"></script>
   </head>
   
   <body>
-  <?php echo current_url(); ?>
+  <?php echo current_url()."<br>";?>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand mb-0 h1" href="https://infs3202-8a85b4a1.uqcloud.net/project/">Reviewers Hub</a>
+    <a class="navbar-brand mb-0 h1" href="<?php echo base_url(); ?>">Reviewers Hub</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -30,13 +31,13 @@
         </li>
 
         <li class="nav-item <?php echo ($this->uri->segment(1) == ("UserReview")) ? "active" : "" ?>">
-          <a class="nav-link" href="<?php echo base_url();?>UserReview">My Review</a>
+          <a class="nav-link" href="<?php echo base_url();?>UserReview">Reviews</a>
         </li>
       </ul>
       
       <!-- check for when there is a session or a cookie if both are not present, button will be displayed -->
       <ul class="navbar-nav">
-        <?php if( (!$this->session->userdata('logged_in')) && ($cookie === 'not true') ) : ?>
+        <?php if( (!$this->session->userdata('logged_in')) && (!get_cookie("remember")) ) : ?>
           <!-- Login popup triggered when clicked and will be shown user has not logged in -->
           <li class="nav-item" data-toggle="modal" data-target="#loginModal">
             <a class="nav-link" href=#>Login</a>
@@ -45,16 +46,15 @@
             <a class="nav-link" href=#>Create Account</a>
           </li>
         <?php endif; ?>
-        <?php if( ($this->session->userdata('logged_in')) || ($cookie === true) ) : ?>
-          <!-- will need to create user profile controller -->
+        <?php if( ($this->session->userdata('logged_in')) || (get_cookie("remember") == 'true') ) : ?>
           <!-- user profile link will change depending on name of username -->
-          <li class="nav-item">
+          <li class="nav-item <?php echo ($this->uri->segment(1) == ("UserProfile")) ? "active" : "" ?>">
             <a class="nav-link" href="<?php echo base_url(); ?>UserProfile">
               <?php
               $username = "";
               if ($this->session->userdata('logged_in')) {
                 $username = $this->session->userdata('username');
-              } else if ($cookie === true) {
+              } else if (get_cookie("remember") == true) {
                 $username = get_cookie("username");
               }
 
@@ -134,20 +134,8 @@
               <label for="passwordRegister">Password</label>
               <div class="d-flex flex-row justify-content-between">
 
-                <div id="first-progress" class="progress" style="height: 0.5rem !important; width: 25%;">
+                <div id="first-progress" class="progress" style="height: 0.5rem !important; width: 100%;">
                   <div id="first-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-
-                <div id="second-progress" class="progress" style="height: 0.5rem !important; width: 25%;">
-                  <div id="second-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-
-                <div id="third-progress" class="progress" style="height: 0.5rem !important; width: 25%;">
-                  <div id="third-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-
-                <div id="fourth-progress" class="progress" style="height: 0.5rem !important; width: 25%;">
-                  <div id="fourth-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
 
               </div>
@@ -256,29 +244,21 @@
       // password strength validator and visualization on browser
       $('#passwordRegister').keyup(function() {
         $('#first-progress-bar').css("width", "0%");
-        $('#second-progress-bar').css("width", "0%");
-        $('#third-progress-bar').css("width", "0%");
-        $('#fourth-progress-bar').css("width", "0%");
 
-        $(".bg-success").removeClass("bg-success");
-        $(".bg-info").removeClass("bg-info");
-        $(".bg-warning").removeClass("bg-warning");
-        $(".bg-danger").removeClass("bg-danger");
+        $("#first-progress-bar").removeClass("bg-success");
+        $("#first-progress-bar").removeClass("bg-info");
+        $("#first-progress-bar").removeClass("bg-warning");
+        $("#first-progress-bar").removeClass("bg-danger");
 
         if (checkPasswordStrength() == 0) {
-          $('#first-progress-bar').addClass("bg-danger").css("width","100%");
+          $('#first-progress-bar').addClass("bg-danger").css("width","25%");
         } else if (checkPasswordStrength() == 1) {
-          $('#first-progress-bar').addClass("bg-warning").css("width","100%");
-          $('#second-progress-bar').addClass("bg-warning").css("width","100%");
+          $('#first-progress-bar').addClass("bg-warning").css("width","50%");
         } else if (checkPasswordStrength() == 2) {
-          $('#first-progress-bar').addClass("bg-info").css("width","100%");
-          $('#second-progress-bar').addClass("bg-info").css("width","100%");
-          $('#third-progress-bar').addClass("bg-info").css("width","100%");
+          $('#first-progress-bar').addClass("bg-info").css("width","75%");
         } else {
           $('#first-progress-bar').addClass("bg-success").css("width","100%");
-          $('#second-progress-bar').addClass("bg-success").css("width","100%");
-          $('#third-progress-bar').addClass("bg-success").css("width","100%");
-          $('#fourth-progress-bar').addClass("bg-success").css("width","100%");
+
         }
       });
 
