@@ -1,8 +1,27 @@
+    <?php 
+        $image_info = getimagesize("https://infs3202-8a85b4a1.uqcloud.net/project/uploads/user_display_pic/User5.PNG");
+        print_r($image_info[3]."<br>");
+        echo $image_dp."<br>";
+        echo base_url()."assets/img/placeholder.PNG";
+    ?>
+
     <div id="user_profile_heading" class="container-sm shadow bg-white rounded" >
         <div class="row">
             <!-- for display pic -->
             <div class="col-sm-4 d-flex align-items-center justify-content-center">
-                <img id="user_display_pic" class="img-fluid rounded-circle" src="<?php echo base_url(); ?>assets/img/placeholder.PNG" alt="Placeholder picture for users to upload their own">
+
+                <a id="display_pic" class="d-flex align-items-center justify-content-center" href="#user_upload_display_pic">
+                    <img id="user_display_pic" class="img-fluid rounded-circle" src="<?php
+                        if (!$image_dp) {
+                            echo base_url()."assets/img/placeholder.PNG";
+                        } else {
+                            echo $image_dp;
+                        }
+                    ?>" alt="Placeholder picture for users to upload their own">
+                    <div class="overlay">
+                        <h6 class="text">Upload a Picture</h6>
+                    </div>
+                </a>
             </div>
 
             <!-- for username and email -->
@@ -13,12 +32,14 @@
             </div>
 
             <!-- number of reviews made -->
+            <!-- require further development -->
             <div class="col-sm-2 d-flex flex-column align-items-center justify-content-center">
                 <h3 id="num_of_reviews">0</h3>
                 <h6>Reviews Made</h6>
             </div>
 
             <!-- reputation of user -->
+            <!-- require further development -->
             <div class="col-sm-2 d-flex flex-column align-items-center justify-content-center">
                 <h3 id="reputation">0</h3>
                 <h6>Reputation</h6>
@@ -127,6 +148,69 @@
         </div>
     </div>
 
+    <div id="user_upload_display_pic" class="container-sm" >
+        <div class="row d-flex justify-content-between">
+            <!-- information on uploading pic -->
+            <div id="upload_dp_section" class="col-sm-4 shadow bg-white rounded">
+                <div class="row">
+                    <h3 class="col-sm-12">Upload Profile Picture</h3>
+                    <?php echo form_open_multipart('UserProfile/upload_user_display_pic');?>
+                    <label class="col-sm-12" for="uploadImageDP" style="width:100%"><p>Choose a picture for your profile picture</p></label>
+                        <input id="input_image" type="file" class="form-control-file col-sm-12" id="uploadImageDP" name="input_image" style="margin-bottom: 1rem;"> 
+
+                        <!-- feedback for user -->
+                        <label class="col-sm-12 <?php
+                            if ($error) {
+                                echo "text-danger d-block";
+                            } else if ($success) {
+                                echo "text-success d-block";
+                            } else {
+                                echo "d-none";
+                            }
+                         ?>">
+                            <p>
+                                <?php echo $error; ?>
+                                <?php echo $success; ?>
+                            </p>
+                        </label>
+                        <label class="col-sm-12"><p>Preview image chosen</p></label>
+
+                        <p class="col-sm-12 
+                        <?php
+                            if ($image_dp) {
+                                echo "d-none";
+                            }
+                        ?>
+                        ">No image has been chosen yet.</p> 
+
+                        <img class="col-sm-12 <?php
+                            if (!$image_dp) {
+                                echo "d-none";
+                            } else {
+                                echo "d-block";
+                            }
+                        ?>" id="preview_image" src="<?php echo $image_dp; ?>" alt="Chosen image" style="margin-bottom: 1rem; width:50%; height:45%">
+
+                        <div class="form-group d-flex justify-content-end col-sm-12">
+                            <input type="submit" class="bg-dark" id="upload_profile_pic" name="upload_profile_pic" value="Upload" style="color:white; padding: 0.375rem 0.75rem; border-radius: 0.25rem"></input>
+                        </div>
+                    <?php echo form_close(); ?>
+
+                </div>
+            </div>
+
+            <!-- about you section -->
+            <div id="user_reviews_made" class="col-sm-7 shadow bg-white rounded">
+            <!-- align-items-center for mobile later on -->
+                <div class="row">
+                    <h3 class="col-sm-12">Your Reviews</h3>
+                    <!-- further development -->
+                    <!-- <p class="col-sm-12"><?php echo $reviews_made ?></p> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
             var username = "<?php echo $username; ?>";
@@ -144,7 +228,6 @@
                     method: "POST",
                     data: { username:username, country:country, occupation:occupation, phone:phone, about:about },
                     success: function(response) {
-                        console.log(response);
                         if (response === "Changes Saved") {
                             $("#editProfileModal").modal('hide');
                             location.reload();
@@ -152,5 +235,9 @@
                     }
                 });
             });
+
+
+
+
         });
     </script>

@@ -86,5 +86,77 @@ class User_model extends CI_Model {
 		$this->db->where('UserID', $userID);
 		$this->db->update('Users', $data);
 	}
+
+	
+
+	// using token stored in cookie, retrieve username
+	public function get_username_with_token($token) {
+		$hash_token = md5($token);
+
+		// construct sql query for Tokens table
+		$this->db->select('UserID');
+		$this->db->from('Tokens');
+		$this->db->where('Token', $hash_token);
+		$result = $this->db->get();
+		$userID = $result->row_array()["UserID"];
+
+		// // construct sql query for Users table
+		$this->db->select('Username');
+		$this->db->from('Users');
+		$this->db->where('UserID', $userID);
+		$result_username = $this->db->get();
+
+		return $result_username->row_array()["Username"];
+	}
+
+	// since row for token does not exist, need to insert new row for token
+	public function register_token($username, $token) {
+		//Store hashed token into data array that will be sent and registered in database
+		$userID = $this->get_user_id($username);
+		$data = array(
+			'UserID' => $userID,
+			'Token' => md5($token)
+		);
+
+		$this->db->insert('Tokens', $data);
+	}
+
+	// remove token with userID
+	public function remove_token($userID) {
+		$this->db->where('UserID', $userID);
+		$this->db->delete('Tokens');
+	}
+
+	public function check_token_with_userID($userID) {
+
+		// construct sql query
+		$this->db->select('Token');
+		$this->db->from('Tokens');
+		$this->db->where('UserID', $userID);
+		$result = $this->db->get();
+
+		if ($result->num_rows() == 1){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// will be used when remember me function is used
+	public function check_token($token) {
+		$hash_token = md5($token);
+
+		// construct sql query
+		$this->db->select('UserID, Token');
+		$this->db->from('Tokens');
+		$this->db->where('Token', $hash_token);
+		$result = $this->db->get();
+
+		if ($result->num_rows() == 1){
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 ?>

@@ -2,9 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Login extends CI_Controller
 {
+
+    public function __construct() {
+        parent:: __construct();
+		$this->load->library('session'); //enable session
+		$this->load->model('User_model');
+    }
+
     // method doesn't load a page but rather helps with checking if username and password is correct which then helps ajax decide on what to do
     public function check_login() {
-        $this->load->model('User_model'); // load User_model
         $username_input = $this->input->post('username');
         $password_input = $this->input->post('password');
         $remember_me = $this->input->post('remember');
@@ -22,8 +28,23 @@ class Login extends CI_Controller
 
             // create cookie since remember me was checked
             if ($remember_me == "true") {
-                set_cookie("username", $username_input, 300); //set cookie username
-				set_cookie("password", $password_input, 300); //set cookie password
+                $userID = $this->User_model->get_user_id($username_input);
+
+                // if cookie expired and token is still in database, will need to remove from database to prevent any errors
+                if ($this->User_model->check_token_with_userID($userID)) {
+                    $this->User_model->remove_token($userID);
+                }
+
+                // Generate a random string.
+                $token = openssl_random_pseudo_bytes(16);
+
+                // Convert the binary data into hexadecimal representation.
+                $token = bin2hex($token);
+
+                // register token to database
+                $this->User_model->register_token($username_input, $token);
+
+                set_cookie("token", $token, 300); // set token
 				set_cookie("remember", $remember_me, 300); //set cookie remember
             }
 
@@ -34,13 +55,18 @@ class Login extends CI_Controller
     }
 
     public function logout() {
+        // when logging out, will need to destroy token in database
+        $username = $this->session->userdata('username');
+        $userID = $this->User_model->get_user_id($username);
+        $this->User_model->remove_token($userID);
+
         // upon logging out, both cookies and sessions will be destroyed
         $remove_keys = array('username', 'logged_in');
         $this->session->unset_userdata($remove_keys); //delete login status
+
         // delete all cookies
-		delete_cookie("username");
-		delete_cookie("password");
-		delete_cookie("remember");
+        delete_cookie("remember");
+        delete_cookie("token");
 		redirect('Home'); //redirect user back to homepage
 	}
 

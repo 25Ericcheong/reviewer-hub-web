@@ -52,12 +52,9 @@
             <a class="nav-link" href="<?php echo base_url(); ?>UserProfile">
               <?php
               $username = "";
-              if ($this->session->userdata('logged_in')) {
+              if ($this->session->userdata('logged_in') || get_cookie("remember") == true) {
                 $username = $this->session->userdata('username');
-              } else if (get_cookie("remember") == true) {
-                $username = get_cookie("username");
-              }
-
+              } 
               echo $username;
               ?>
             </a>
@@ -158,6 +155,32 @@
 
   <script>
     $(document).ready(function(){
+      var idleTime = 0;
+      // automatic logout when user is inactive
+
+      // first check if a user is logged in
+      let userLoggedIn = "<?php echo $this->session->userdata('logged_in'); ?>";
+
+      // when submitting - remember to uncomment
+      // if (userLoggedIn) {
+      //   // if user clicks or even move mouse, idle time will be reset
+      //   var idleInterval = setInterval(timerIncrement, 60000); // 1 minute //60000
+      //   $(this).mousemove(function(e) {
+      //     idleTime = 0;
+      //   });
+
+      //   $(this).keypress(function(e) {
+      //       idleTime = 0;
+      //   });
+      // }
+
+      // if user is idle for 30 minutes, website will auto logout
+      // function timerIncrement() {
+      //   idleTime = idleTime + 1;
+      //   if (idleTime >= 30) {
+      //     window.location = "<?php echo base_url(); ?>Login/logout";
+      //     }
+      // }
 
       // for login
       $('#login_submit').click(function() {
