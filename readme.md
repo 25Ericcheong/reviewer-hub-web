@@ -20,14 +20,3 @@ Dataabse name is project
 
 Links related
 Do wide search on files for https://infs3202-8a85b4a1.uqcloud.net/project/ - since new deployed environment will have different link
-
-Codes used to create tables in MySQL
-To create users table
-CREATE TABLE Users (
-  UserID int NOT NULL AUTO_INCREMENT,
-  Username varchar(255) NOT NULL UNIQUE,
-  Password varchar(255) NOT NULL,
-  Email varchar(255) NOT NULL UNIQUE,
-  Phone_Number varchar(255),
-  PRIMARY KEY (UserID, Username) 
-);
